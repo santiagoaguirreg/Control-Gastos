@@ -15,7 +15,6 @@ const NuevoPresupuesto = ({presupuesto, setPresupuesto, setIsValidPresupuesto}) 
            return;
        } 
 
-
        setMensaje('')
        setIsValidPresupuesto(true)
 
