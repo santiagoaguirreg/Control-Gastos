@@ -1,16 +1,30 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import CerrarBtn from '../img/cerrar.svg'
 import Mensaje from './Mensaje'
 
-const Modal = ({setModal, animarModal, setAnimarModal, guardarGasto}) => {
+const Modal = ({setModal, animarModal, setAnimarModal, guardarGasto, gastoEditar, setGastoEditar}) => {
 
    const [mensaje, setMensaje] = useState("")
    const [nombre, setNombre] = useState("")
    const [cantidad, setCantidad] = useState("")
    const [categoria, setCategoria] = useState("")
+   const [fecha, setFecha] = useState('')
+   const [id, setId] = useState('')
+
+   useEffect(() => {
+
+    if(Object.keys(gastoEditar).length > 0) {
+       setNombre(gastoEditar.nombre);
+       setCantidad(gastoEditar.cantidad);
+       setCategoria(gastoEditar.categoria);
+       setId(gastoEditar.id)
+       setFecha(gastoEditar.fecha)
+    }
+  }, [gastoEditar])
 
     const ocultarModal = () => {
       setAnimarModal(false)
+      setGastoEditar({})
 
       setTimeout(() => {
         setModal(false)
@@ -33,7 +47,7 @@ const Modal = ({setModal, animarModal, setAnimarModal, guardarGasto}) => {
 
         setMensaje('')
 
-        guardarGasto({nombre, cantidad, categoria})
+        guardarGasto({nombre, cantidad, categoria, id, fecha})
 
     }
 
@@ -48,7 +62,7 @@ const Modal = ({setModal, animarModal, setAnimarModal, guardarGasto}) => {
      </div>
 
      <form onSubmit={handleSubmit} className={`formulario ${animarModal ? 'animar' : 'cerrar'}`}>
-        <legend>Nuevo Gasto</legend>
+        <legend>{gastoEditar.nombre ? "Editar Gasto" : "Nuevo Gasto"}</legend>
 
         <div className='campo'>
           <label htmlFor="nombre">Nombre gasto</label>
@@ -96,7 +110,7 @@ const Modal = ({setModal, animarModal, setAnimarModal, guardarGasto}) => {
 
         <input 
           type="submit"
-          value="Añadir Gasto"
+          value={gastoEditar.nombre ? "Guardar Cambios" : "Añadir Gasto"}
         />
 
     {mensaje && <Mensaje tipo="error">{mensaje}</Mensaje>}
